@@ -54,9 +54,14 @@ module.exports = {
         // custom colors
 
         "neutral-20": "var(--dark-mode-neutral-20)",
+        "neutral-30": "var(--dark-mode-neutral-30)",
         "neutral-40": "var(--dark-mode-neutral-40)",
+        "neutral-60": "var(--dark-mode-neutral-60)",
+        "neutral-50": "var(--dark-mode-neutral-50)",
         "orange-50": "var(--dark-mode-orange-50)",
         "orange-30": "var(--dark-mode-orange-30)",
+        danger: "var(--dark-mode-danger)",
+        success: "var(--dark-mode-success)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -76,6 +81,36 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontSize: {
+        "title-1": [
+          "1rem",
+          {
+            fontWeight: 500,
+            lineHeight: "160%",
+          },
+        ],
+        "title-2": [
+          "0.875rem",
+          {
+            fontWeight: 400,
+            lineHeight: "160%",
+          },
+        ],
+        "heading-1": [
+          "1.5rem",
+          {
+            fontWeight: 500,
+            lineHeight: "150%",
+          },
+        ],
+        "pragraph-1": [
+          "0.75rem",
+          {
+            fontWeight: 500,
+            lineHeight: "160%",
+          },
+        ],
       },
     },
   },

@@ -10,9 +10,14 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --dark-mode-neutral-20: #cfcfcf;
+    --dark-mode-neutral-30: #9e9e9e;
     --dark-mode-neutral-40: #565656;
     --dark-mode-orange-30: #ff7d08;
     --dark-mode-orange-50: #421f00;
+    --dark-mode-neutral-50: #252525;
+    --dark-mode-neutral-60: #0d0d0d;
+    --dark-mode-danger: #f27b7b;
+    --dark-mode-success: #7df27b;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
@@ -76,4 +81,7 @@
   body {
     @apply text-foreground;
   }
+}
+
+@layer components {
 }
