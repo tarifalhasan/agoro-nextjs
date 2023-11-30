@@ -104,6 +104,13 @@ module.exports = {
             lineHeight: "150%",
           },
         ],
+        "heading-3": [
+          "1.125rem",
+          {
+            fontWeight: 700,
+            lineHeight: "140%",
+          },
+        ],
         "pragraph-1": [
           "0.75rem",
           {

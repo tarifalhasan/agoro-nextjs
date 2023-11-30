@@ -96,7 +96,7 @@ const Wallet: FC = () => {
   ];
   return (
     <Container>
-      <div className="flex flex-col min-h-screen pb-20">
+      <div className="flex flex-col min-h-screen pb-24">
         <BottomNavigation />
         <div className=" pt-10">
           <div className=" py-3 space-y-[4px]">
