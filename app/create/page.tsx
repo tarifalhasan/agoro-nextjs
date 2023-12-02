@@ -2,6 +2,7 @@
 
 import Container from "@/components/Container";
 import Create2 from "@/components/create/Create2";
+import Create3 from "@/components/create/Create3";
 import Step1 from "@/components/create/Step1";
 import UploadArt from "@/components/create/UploadArt";
 import UploadMusic from "@/components/create/UploadMusic";
@@ -10,6 +11,7 @@ import { useState } from "react";
 interface UploadTypeS {
   uploadType: "visual-art" | "music";
 }
+
 const Create = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [uploadType, setUploadType] = useState<UploadTypeS>();
@@ -23,6 +25,12 @@ const Create = () => {
     imageVideo: "",
     tags: [] as string[],
   });
+  const [selectArt, setSelectArt] = useState<{ arts: string[] }>({
+    arts: [] as string[],
+  });
+
+  console.log(selectArt);
+
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
@@ -52,7 +60,22 @@ const Create = () => {
           <UploadArt formData={uploadArtData} setFormData={setUploadArtData} />
         )}
 
-        {currentStep === 2 && <Create2 />}
+        {currentStep === 2 && (
+          <Create2
+            formData={selectArt}
+            setFormData={setSelectArt}
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+          />
+        )}
+        {currentStep === 3 && (
+          <Create3
+            formData={selectArt}
+            setFormData={setSelectArt}
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+          />
+        )}
       </div>
     </Container>
   );

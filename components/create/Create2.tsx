@@ -1,8 +1,9 @@
 "use client";
 import { CloseCircle } from "@/assets/svg";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import * as z from "zod";
+import MusicCard from "../common/MusicCard";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 
@@ -12,52 +13,93 @@ const FormSchema = z.object({
     required_error: "Please upload a valid image or video",
   }),
 });
-const Create2 = () => {
+
+const ArtsData = [
+  "/images/art3.png",
+  "/images/art4.png",
+  "/images/art5.png",
+  "/images/art6.png",
+  "/images/art7.png",
+  "/images/art8.png",
+];
+
+interface Crete2Props {
+  formData: {
+    arts: string[];
+  };
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      arts: string[];
+    }>
+  >;
+  onNext: () => void;
+  onPrevious: () => void;
+}
+const Create2: FC<Crete2Props> = ({
+  formData,
+  setFormData,
+  onNext,
+  onPrevious,
+}) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [formData, setFormData] = useState({
-    arts: "",
-  });
-  const [isSelecttedCard, setIsSelecttedCard] = useState(false);
-  const handleImageVideoUpload = (
+
+  const [selectedArt, setSelectedArt] = useState<string[]>([]);
+  const [UploadFiles, setUploadFiles] = useState<File[]>([]);
+
+  const handleArtSelection = (selectedItem: string) => {
+    const isSelected = selectedArt.includes(selectedItem);
+
+    if (isSelected) {
+      const updatedSelection = selectedArt.filter(
+        (item) => item !== selectedItem
+      );
+      setSelectedArt(updatedSelection);
+    } else {
+      setSelectedArt([...selectedArt, selectedItem]);
+    }
+  };
+  const handleImageVideoUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files?.[0];
+    const files = event.target.files;
 
-    if (file) {
-      console.log("Selected File:", file);
-      setFormData({
-        ...formData,
-        arts: file.name,
-      });
+    if (files) {
+      try {
+        const selectedFileArray = Array.from(files);
+        setUploadFiles(selectedFileArray);
+        // Assuming a backend API for file upload (you would replace 'uploadEndpoint' with your actual endpoint)
+        // const formData = new FormData();
+        // formData.append("file", file);
+
+        // // Send the file to the server
+        // const response = await fetch("uploadEndpoint", {
+        //   method: "POST",
+        //   body: formData,
+        // });
+
+        // Handle response from the server as needed
+        // If storing locally, you might use FileReader API or other methods
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
+  };
+  const handleArtSelectRemove = (itemNameToRemove: string) => {
+    const updatedSelection = selectedArt.filter(
+      (item) => item !== itemNameToRemove
+    );
+    setSelectedArt(updatedSelection);
   };
 
   const onSubmit = async () => {
-    const validationResult = FormSchema.safeParse(formData);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      arts: [...selectedArt],
+    }));
 
-    if (!validationResult.success) {
-      setErrorMessage(validationResult.error.message);
-      return;
-    }
+    onNext();
   };
 
-  const uploadImage = ["/images/art1.png", "/images/art2.png"];
-
-  const serachArts = [
-    "/images/art3.png",
-    "/images/art4.png",
-    "/images/art5.png",
-    "/images/art6.png",
-    "/images/art7.png",
-    "/images/art8.png",
-  ];
-  const selectedCard = [
-    "/images/art5.png",
-    "/images/art6.png",
-    "/images/art7.png",
-    "/images/art8.png",
-    "/images/art8.png",
-  ];
   return (
     <div className="s py-6">
       <div className=" space-y-5">
@@ -86,21 +128,25 @@ const Create2 = () => {
               onChange={handleImageVideoUpload}
               className="hidden"
               accept="image/*,video/*"
+              multiple
             />
           </label>
         </div>
         {/* map uploading images */}
         <div className=" grid grid-cols-2 gap-4">
-          {uploadImage.map((item, i) => (
+          {UploadFiles.map((item, i) => (
             <div
+              onClick={() => handleArtSelection(item.name)}
               key={i}
-              className=" bg-no-repeat bg-contain bg-top block mx-auto w-full max-w-full relative  pt-[100%]"
+              className=" bg-no-repeat bg-contain bg-top block mx-auto w-full max-w-full relative  pt-[98%]"
               style={{
-                backgroundImage: `url(${item})`,
-                border: isSelecttedCard ? "`2px solid #FF7D08`" : "none",
+                backgroundImage: `url(${URL.createObjectURL(item)})`,
+                border: selectedArt.includes(item.name)
+                  ? "2px solid #FF7D08"
+                  : "2px solid transparent",
               }}
             >
-              {isSelecttedCard && (
+              {selectedArt.includes(item.name) && (
                 <button className=" grid place-items-center bg-black rounded-full absolute top-[2%] right-[2%]">
                   <CloseCircle />
                 </button>
@@ -122,16 +168,19 @@ const Create2 = () => {
               />
             </div>
             <div className=" grid grid-cols-2 gap-5">
-              {serachArts.map((item, i) => (
+              {ArtsData.map((item, i) => (
                 <div
                   key={i}
-                  className=" bg-no-repeat bg-contain bg-top block mx-auto w-full max-w-full relative  pt-[100%]"
+                  className=" bg-no-repeat bg-contain bg-top block mx-auto w-full max-w-full relative  pt-[98%]"
+                  onClick={() => handleArtSelection(item)}
                   style={{
                     backgroundImage: `url(${item})`,
-                    border: isSelecttedCard ? "`2px solid #FF7D08`" : "none",
+                    border: selectedArt.includes(item)
+                      ? "2px solid #FF7D08"
+                      : "2px solid transparent",
                   }}
                 >
-                  {isSelecttedCard && (
+                  {selectedArt.includes(item) && (
                     <button className=" grid place-items-center bg-black rounded-full absolute top-[2%] right-[2%]">
                       <CloseCircle />
                     </button>
@@ -140,24 +189,27 @@ const Create2 = () => {
               ))}
             </div>
             <div className=" pt-4 flex items-start justify-between gap-6">
-              <div className="flex   basis-[75%] gap-4 flex-wrap">
-                {selectedCard.map((item, i) => (
+              <div className=" grid grid-cols-4 gap-5   basis-[75%] ">
+                {selectedArt.map((item, i) => (
                   <div
                     key={i}
-                    className=" bg-no-repeat bg-contain bg-top block mx-auto  max-w-full relative  w-[58px] pt-[12%]"
+                    className=" bg-no-repeat bg-contain bg-top block mx-auto  max-w-full relative  w-[58px] pt-[80%]"
                     style={{
                       backgroundImage: `url(${item})`,
                       border: "2px solid #FF7D08",
                     }}
                   >
-                    <button className=" grid place-items-center bg-black rounded-full absolute -top-[22%] -right-[19%]">
+                    <button
+                      onClick={() => handleArtSelectRemove(item)}
+                      className=" grid place-items-center bg-black rounded-full absolute -top-[22%] -right-[19%]"
+                    >
                       <CloseCircle />
                     </button>
                   </div>
                 ))}
               </div>
               <h3 className=" text-heading-3 font-bold text-orange-30">
-                4 TOTAL
+                {selectedArt.length} TOTAL
               </h3>
             </div>
           </div>
@@ -166,6 +218,7 @@ const Create2 = () => {
           <Button
             className=" w-full uppercase  border-orange-30 hover:border-white text-orange-30"
             variant={"outline"}
+            onClick={onPrevious}
           >
             BACK
           </Button>
@@ -177,6 +230,16 @@ const Create2 = () => {
             CONFIRM ART CHOICES
           </Button>
         </div>
+
+        <MusicCard
+          song={{ title: "Song Title" }} // Replace with the actual song object
+          index={0} // Replace with the actual index
+          playPauseHandler={(index) => {
+            /* pass the playPauseHandler function implementation */
+          }}
+          isPlaying={false} // Replace with the actual isPlaying state
+          currentSongIndex={0} // Replace with the actual currentSongIndex
+        />
       </div>
     </div>
   );
