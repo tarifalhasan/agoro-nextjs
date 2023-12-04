@@ -1,3 +1,4 @@
+"use client";
 import { FaPauseCircle, FaPlayCircle } from "react-icons/fa";
 
 interface MusicCardProps {
