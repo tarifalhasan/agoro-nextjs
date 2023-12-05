@@ -62,6 +62,8 @@ module.exports = {
         "orange-30": "var(--dark-mode-orange-30)",
         danger: "var(--dark-mode-danger)",
         success: "var(--dark-mode-success)",
+        "blue-50": "var(--dark-mode-blue-10)",
+        "blue-150": "var(--dark-mode-blue-50)",
       },
       borderRadius: {
         lg: "var(--radius)",

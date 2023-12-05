@@ -2,17 +2,9 @@
 import { CloseCircle } from "@/assets/svg";
 import { FC, useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import * as z from "zod";
 import MusicCard from "../common/MusicCard";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-
-// Validation schema
-const FormSchema = z.object({
-  arts: z.string({
-    required_error: "Please upload a valid image or video",
-  }),
-});
 
 const ArtsData = [
   "/images/art3.png",

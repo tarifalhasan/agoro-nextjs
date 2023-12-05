@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { FC, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-const ImageSlider = () => {
-  const slides = [
-    "/images/art1.png",
-    "/images/art2.png",
-    "/images/art3.png",
-    "/images/art4.png",
-    "/images/art5.png",
-  ];
 
+interface sliderImages {
+  slides: string[];
+  isCreate?: boolean;
+  CreateHandler?: () => void;
+}
+const ImageSlider: FC<sliderImages> = ({
+  slides,
+  isCreate = false,
+  CreateHandler,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
@@ -35,19 +38,30 @@ const ImageSlider = () => {
       <h3 className=" py-5 text-heading-3 text-center">
         Which art best matches this music?
       </h3>
+
       <div
-        className=" w-full m-0 p-0 !bg-contain relative !bg-top !bg-no-repeat  !max-w-full block !mx-auto pb-[103%] "
+        onClick={
+          isCreate && currentIndex !== slides.length - 1
+            ? undefined
+            : CreateHandler
+        }
+        className={cn(
+          "w-full m-0 p-0 !bg-contain relative !bg-top !bg-no-repeat  !max-w-full block !mx-auto pb-[103%] ",
+          isCreate && currentIndex !== slides.length - 1 ? "" : "cursor-pointer"
+        )}
         style={{ backgroundImage: `url(${slides[currentIndex]})` }}
       >
-        <div className="flex absolute left-0 right-0 bottom-[3%] h-[70px] px-4 items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Avatar className="border border-orange-30">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <p className=" text-title-2 text-white">RAREFACTION</p>
+        {isCreate && currentIndex !== slides.length - 1 ? (
+          <div className="flex absolute left-0 right-0 bottom-[3%] h-[70px] px-4 items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Avatar className="border border-orange-30">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <p className=" text-title-2 text-white">RAREFACTION</p>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       <div className="flex gap-4 top-4 justify-center py-2">

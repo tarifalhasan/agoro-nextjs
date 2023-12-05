@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -11,11 +12,34 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useState } from "react";
 import { RiFlashlightLine } from "react-icons/ri";
 import Container from "../Container";
 
 const VoteModal = () => {
+  const [voteAmount, setVoteAmount] = useState(100);
+  const router = useRouter();
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // Update the vote amount when the input changes
+    setVoteAmount(Number(e.target.value)); // Convert the value to a number
+  };
+
+  const handleVote = () => {
+    // Handle the vote with the selected voteAmount
+    console.log("Voted:", voteAmount); // You can perform your
+
+    router.push("/vote-result");
+  };
+
+  const handleVotePercentage = (percentage: number) => {
+    // Function to update the vote amount based on a percentage value
+    const amount = (percentage / 100) * 100; // Adjust this calculation as needed
+    setVoteAmount(amount);
+  };
+
   return (
     <Container className=" relative overflow-hidden">
       <AlertDialog>
@@ -44,25 +68,49 @@ const VoteModal = () => {
             </p>
             <input
               className=" w-full text-center text-[1.75em] font-bold text-white bg-neutral-50 border border-neutral-40 px-3 py-4 flex items-center justify-center"
-              value={100}
+              value={voteAmount}
+              onChange={handleInputChange}
             />
           </div>
           <div className=" grid grid-cols-4 gap-2">
-            <div className=" px-2 py-3 border border-orange-30 grid place-items-center">
+            <button
+              className={cn(
+                "px-2 py-3 border border-orange-30 grid place-items-center",
+                voteAmount === 25 ? "bg-orange-30" : ""
+              )}
+              onClick={() => handleVotePercentage(25)}
+            >
               <p className=" text-title-1 py-2 text-white">25%</p>
-            </div>
-
-            <div className=" px-2 py-3 border border-orange-30 grid place-items-center">
+            </button>
+            <button
+              className={cn(
+                "px-2 py-3 border border-orange-30 grid place-items-center",
+                voteAmount === 50 ? "bg-orange-30" : ""
+              )}
+              onClick={() => handleVotePercentage(50)}
+            >
               <p className=" text-title-1 py-2 text-white">50%</p>
-            </div>
-            <div className=" px-2 py-3 border border-orange-30 grid place-items-center">
+            </button>
+            <button
+              className={cn(
+                "px-2 py-3 border border-orange-30 grid place-items-center",
+                voteAmount === 75 ? "bg-orange-30" : ""
+              )}
+              onClick={() => handleVotePercentage(75)}
+            >
               <p className=" text-title-1 py-2 text-white">75%</p>
-            </div>
-            <div className=" px-2 py-3 border border-orange-30 grid place-items-center">
+            </button>
+            <button
+              className={cn(
+                "px-2 py-3 border border-orange-30 grid place-items-center",
+                voteAmount === 100 ? "bg-orange-30" : ""
+              )}
+              onClick={() => handleVotePercentage(100)}
+            >
               <p className=" text-title-1 py-2 text-white">100%</p>
-            </div>
+            </button>
           </div>
-          <Button>Vote</Button>
+          <Button onClick={handleVote}>Vote</Button>
           <AlertDialogCancel asChild>
             <Button variant={"outline"} className=" uppercase">
               Cancel

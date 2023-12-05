@@ -1,5 +1,6 @@
 "use client";
-import { FC, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
 import MusicCard from "../common/MusicCard";
 import ImageSlider from "../common/VoteSlider";
 import { Button } from "../ui/button";
@@ -12,7 +13,13 @@ const ArtsData = [
   "/images/art7.png",
   "/images/art8.png",
 ];
-
+const slides = [
+  "/images/art1.png",
+  "/images/art2.png",
+  "/images/art3.png",
+  "/images/art4.png",
+  "/images/art5.png",
+];
 interface Crete2Props {
   formData: {
     arts: string[];
@@ -31,69 +38,15 @@ const Create3: FC<Crete2Props> = ({
   onNext,
   onPrevious,
 }) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const [selectedArt, setSelectedArt] = useState<string[]>([]);
-  const [UploadFiles, setUploadFiles] = useState<File[]>([]);
-
-  const handleArtSelection = (selectedItem: string) => {
-    const isSelected = selectedArt.includes(selectedItem);
-
-    if (isSelected) {
-      const updatedSelection = selectedArt.filter(
-        (item) => item !== selectedItem
-      );
-      setSelectedArt(updatedSelection);
-    } else {
-      setSelectedArt([...selectedArt, selectedItem]);
-    }
-  };
-  const handleImageVideoUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = event.target.files;
-
-    if (files) {
-      try {
-        const selectedFileArray = Array.from(files);
-        setUploadFiles(selectedFileArray);
-        // Assuming a backend API for file upload (you would replace 'uploadEndpoint' with your actual endpoint)
-        // const formData = new FormData();
-        // formData.append("file", file);
-
-        // // Send the file to the server
-        // const response = await fetch("uploadEndpoint", {
-        //   method: "POST",
-        //   body: formData,
-        // });
-
-        // Handle response from the server as needed
-        // If storing locally, you might use FileReader API or other methods
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-    }
-  };
-  const handleArtSelectRemove = (itemNameToRemove: string) => {
-    const updatedSelection = selectedArt.filter(
-      (item) => item !== itemNameToRemove
-    );
-    setSelectedArt(updatedSelection);
-  };
-
+  const router = useRouter();
   const onSubmit = async () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      arts: [...selectedArt],
-    }));
-
-    onNext();
+    router.push("/");
   };
 
   return (
     <div className="s py-6">
       <div className=" space-y-5">
-        <ImageSlider />
+        <ImageSlider slides={slides} />
         <div className=" pt-5 space-y-4">
           <Button
             className=" w-full uppercase  border-orange-30 hover:border-white text-orange-30"
